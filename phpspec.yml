@@ -1,0 +1,4 @@
+suites:
+    analysis:
+        namespace: Cawolf\Behat\AnalysisExtension
+        psr4_prefix: Cawolf\Behat\AnalysisExtension

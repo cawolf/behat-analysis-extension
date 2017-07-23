@@ -1,0 +1,33 @@
+{
+    "name": "cwolf/behat-analysis-extension",
+    "description": "Behat extension for analysing step usage and suite execution time",
+    "keywords": ["behat", "analysis", "extension"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Alexander Wolf",
+            "email": "mail@cawolf.de"
+        }
+    ],
+    "require": {
+        "behat/behat": "^3.0"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^3.4",
+        "phpunit/phpunit": "^6.2",
+        "squizlabs/php_codesniffer": "^3.0",
+        "phpmd/phpmd": "^2.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cawolf\\Behat\\AnalysisExtension\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TestApp\\": "testapp/features/bootstrap",
+            "Cawolf\\Behat\\AnalysisExtension\\Context\\": "features/bootstrap"
+        }
+    }
+}
