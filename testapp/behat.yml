@@ -1,0 +1,9 @@
+default:
+    suites:
+        default:
+            paths:
+                - testapp/features
+            contexts:
+                - TestApp\TestAppContext
+    formatters:
+        progress: true
