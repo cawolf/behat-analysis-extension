@@ -21,13 +21,20 @@
     },
     "autoload": {
         "psr-4": {
-            "Cawolf\\Behat\\AnalysisExtension\\": "src/"
+            "Cawolf\\Behat\\Analysis\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "TestApp\\": "testapp/features/bootstrap",
-            "Cawolf\\Behat\\AnalysisExtension\\Context\\": "features/bootstrap"
+            "Cawolf\\Behat\\Analysis\\Context\\": "features/bootstrap",
+            "spec\\Cawolf\\Behat\\Analysis\\": "spec"
         }
+    },
+    "scripts": {
+        "test": [
+            "vendor/bin/phpspec run",
+            "vendor/bin/behat"
+        ]
     }
 }

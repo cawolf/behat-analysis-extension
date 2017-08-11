@@ -1,4 +1,5 @@
 suites:
     analysis:
-        namespace: Cawolf\Behat\AnalysisExtension
-        psr4_prefix: Cawolf\Behat\AnalysisExtension
+        namespace: Cawolf\Behat\Analysis
+        psr4_prefix: Cawolf\Behat\Analysis
+formatter.name: dot

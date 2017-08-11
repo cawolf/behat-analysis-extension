@@ -4,4 +4,6 @@ default:
             paths:
                 - features
             contexts:
-                - Cawolf\Behat\AnalysisExtension\Context\FeatureContext
+                - Cawolf\Behat\Analysis\Context\FeatureContext
+    formatters:
+        progress: true
