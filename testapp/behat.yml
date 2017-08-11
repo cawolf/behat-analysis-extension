@@ -7,3 +7,5 @@ default:
                 - TestApp\TestAppContext
     formatters:
         progress: true
+    extensions:
+        Cawolf\Behat\Analysis: ~
