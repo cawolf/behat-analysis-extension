@@ -24,6 +24,16 @@ class Accumulator
     private $data = [];
 
     /**
+     * @var float
+     */
+    private $startTimestamp = null;
+
+    /**
+     * @var float
+     */
+    private $previousTime = 0;
+
+    /**
      * Saves timestamp for a given point in the execution.
      *
      * @param string $point
@@ -32,7 +42,23 @@ class Accumulator
      */
     public function accumulate($point, $type, $name)
     {
-        $this->data[] = [$point, $type, $name, microtime(true)];
+        $microtime = microtime(true);
+
+        if (!$this->startTimestamp) {
+            $this->startTimestamp = $microtime;
+        }
+
+        if ($this->data) {
+            $this->previousTime = $this->data[count($this->data) - 1][3];
+        }
+
+        $this->data[] = [
+            $point,
+            $type,
+            $name,
+            $microtime - $this->startTimestamp,
+            $microtime - $this->startTimestamp - $this->previousTime
+        ];
     }
 
     /**
