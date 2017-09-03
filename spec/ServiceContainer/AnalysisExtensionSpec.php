@@ -6,7 +6,9 @@ use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Cawolf\Behat\Analysis\Controller\Output;
+use Cawolf\Behat\Analysis\Printer\Result;
 use Cawolf\Behat\Analysis\ServiceContainer\AnalysisExtension;
+use Cawolf\Behat\Analysis\Tester\Feature;
 use Cawolf\Behat\Analysis\Tester\Suite;
 use Cawolf\Behat\Analysis\Timing\Accumulator;
 use PhpSpec\ObjectBehavior;
@@ -38,6 +40,8 @@ class AnalysisExtensionSpec extends ObjectBehavior
     {
         $this->setDefinitionShouldBeCalled($container, Accumulator::SERVICE_ID, Accumulator::class);
         $this->setDefinitionShouldBeCalled($container, TesterExtension::SUITE_TESTER_WRAPPER_TAG . Suite::SERVICE_SUFFIX, Suite::class);
+        $this->setDefinitionShouldBeCalled($container, TesterExtension::SPECIFICATION_TESTER_WRAPPER_TAG . Feature::SERVICE_SUFFIX, Feature::class);
+        $this->setDefinitionShouldBeCalled($container, Result::SERVICE_ID, Result::class);
         $this->setDefinitionShouldBeCalled($container, CliExtension::CONTROLLER_TAG . Output::SERVICE_SUFFIX, Output::class);
 
         $this->load($container, []);

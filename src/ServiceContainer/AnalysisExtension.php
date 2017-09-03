@@ -4,9 +4,12 @@ namespace Cawolf\Behat\Analysis\ServiceContainer;
 
 use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
+use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Cawolf\Behat\Analysis\Controller\Output;
+use Cawolf\Behat\Analysis\Printer\Result;
+use Cawolf\Behat\Analysis\Tester\Feature;
 use Cawolf\Behat\Analysis\Tester\Suite;
 use Cawolf\Behat\Analysis\Timing\Accumulator;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -45,6 +48,7 @@ class AnalysisExtension implements Extension
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadTimings($container);
+        $this->loadPrinters($container);
         $this->loadTesters($container);
         $this->loadControllers($container);
     }
@@ -61,6 +65,16 @@ class AnalysisExtension implements Extension
     /**
      * @param ContainerBuilder $container
      */
+    private function loadPrinters(ContainerBuilder $container)
+    {
+        $definition = new Definition(Result::class, [new Reference(Accumulator::SERVICE_ID)]);
+        $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG);
+        $container->setDefinition(Result::SERVICE_ID, $definition);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
     private function loadTesters(ContainerBuilder $container)
     {
         $definition = new Definition(
@@ -69,6 +83,19 @@ class AnalysisExtension implements Extension
         $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, ['priority' => 10000]);
         $container->setDefinition(
             TesterExtension::SUITE_TESTER_WRAPPER_TAG . Suite::SERVICE_SUFFIX,
+            $definition
+        );
+
+        $definition = new Definition(
+            Feature::class,
+            [
+                new Reference(TesterExtension::SPECIFICATION_TESTER_ID),
+                new Reference(Accumulator::SERVICE_ID)
+            ]
+        );
+        $definition->addTag(TesterExtension::SPECIFICATION_TESTER_WRAPPER_TAG, ['priority' => 10000]);
+        $container->setDefinition(
+            TesterExtension::SPECIFICATION_TESTER_WRAPPER_TAG . Feature::SERVICE_SUFFIX,
             $definition
         );
     }
