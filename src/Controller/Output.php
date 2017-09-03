@@ -29,8 +29,6 @@ class Output implements Controller
     /** @inheritdoc */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        // TODO: delegate to generator service
-        file_put_contents(__DIR__ . '/../../analysis-steps.csv', 'My first extension output!' . PHP_EOL);
         return null;
     }
 }
