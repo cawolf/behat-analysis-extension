@@ -3,7 +3,7 @@
 namespace Cawolf\Behat\Analysis\Context;
 
 use Behat\Behat\Context\Context;
-use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\TableNode;
 use PHPUnit\Framework\Assert;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
@@ -73,12 +73,21 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Then I receive a result file which equals:
+     * @Then I receive a result file which contains the following accumulations:
      *
-     * @param PyStringNode $string
+     * @param TableNode $table
      */
-    public function iReceiveAResultFileWhichEquals(PyStringNode $string)
+    public function iReceiveAResultFileWhichContainsTheFollowingAccumulations(TableNode $table)
     {
-        Assert::assertStringEqualsFile(__DIR__ . '/../../analysis-steps.csv', $string->getRaw());
+        $lastTimestamp = 0;
+        $csvFile = new \SplFileObject('analysis-steps.csv');
+        foreach ($table->getHash() as $row) {
+            $currentLine = $csvFile->getCurrentLine();
+            Assert::assertStringStartsWith($row['prefix'], $currentLine);
+
+            $timestamp = (float) explode(';', $currentLine)[3];
+            Assert::assertGreaterThanOrEqual($lastTimestamp + $row['seconds'], $timestamp);
+            $lastTimestamp = $timestamp;
+        }
     }
 }
