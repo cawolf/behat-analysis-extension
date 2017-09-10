@@ -21,10 +21,11 @@ class AccumulatorSpec extends ObjectBehavior
 
         $exampleData = $this->getAccumulatedData()[0];
         $exampleData->shouldBeArray();
-        $exampleData->shouldHaveCount(4);
+        $exampleData->shouldHaveCount(5);
         $exampleData[0]->shouldEqual(Accumulator::POINT_SETUP);
         $exampleData[1]->shouldEqual(Accumulator::TYPE_SUITE);
         $exampleData[2]->shouldEqual('a suite');
         $exampleData[3]->shouldBeFloat();
+        $exampleData[4]->shouldBeFloat();
     }
 }

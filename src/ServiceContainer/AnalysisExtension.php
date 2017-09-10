@@ -10,6 +10,7 @@ use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Cawolf\Behat\Analysis\Controller\Output;
 use Cawolf\Behat\Analysis\Printer\Result;
 use Cawolf\Behat\Analysis\Tester\Feature;
+use Cawolf\Behat\Analysis\Tester\Scenario;
 use Cawolf\Behat\Analysis\Tester\Suite;
 use Cawolf\Behat\Analysis\Timing\Accumulator;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -77,26 +78,28 @@ class AnalysisExtension implements Extension
      */
     private function loadTesters(ContainerBuilder $container)
     {
-        $definition = new Definition(
-            Suite::class, [new Reference(TesterExtension::SUITE_TESTER_ID), new Reference(Accumulator::SERVICE_ID)]
-        );
-        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, ['priority' => 10000]);
-        $container->setDefinition(
-            TesterExtension::SUITE_TESTER_WRAPPER_TAG . Suite::SERVICE_SUFFIX,
-            $definition
+        $this->loadSingleTester(
+            $container,
+            Suite::class,
+            TesterExtension::SUITE_TESTER_ID,
+            TesterExtension::SUITE_TESTER_WRAPPER_TAG,
+            Suite::SERVICE_SUFFIX
         );
 
-        $definition = new Definition(
+        $this->loadSingleTester(
+            $container,
             Feature::class,
-            [
-                new Reference(TesterExtension::SPECIFICATION_TESTER_ID),
-                new Reference(Accumulator::SERVICE_ID)
-            ]
+            TesterExtension::SPECIFICATION_TESTER_ID,
+            TesterExtension::SPECIFICATION_TESTER_WRAPPER_TAG,
+            Feature::SERVICE_SUFFIX
         );
-        $definition->addTag(TesterExtension::SPECIFICATION_TESTER_WRAPPER_TAG, ['priority' => 10000]);
-        $container->setDefinition(
-            TesterExtension::SPECIFICATION_TESTER_WRAPPER_TAG . Feature::SERVICE_SUFFIX,
-            $definition
+
+        $this->loadSingleTester(
+            $container,
+            Scenario::class,
+            TesterExtension::SCENARIO_TESTER_ID,
+            TesterExtension::SCENARIO_TESTER_WRAPPER_TAG,
+            Scenario::SERVICE_SUFFIX
         );
     }
 
@@ -111,5 +114,29 @@ class AnalysisExtension implements Extension
             CliExtension::CONTROLLER_TAG . Output::SERVICE_SUFFIX,
             $definition
         );
+    }
+
+    /**
+     * Loads a single tester.
+     *
+     * @param ContainerBuilder $container
+     * @param string $testerClassName
+     * @param string $testerExtensionId
+     * @param string $testerTag
+     * @param string $testerServiceSuffix
+     */
+    private function loadSingleTester(
+        ContainerBuilder $container,
+        $testerClassName,
+        $testerExtensionId,
+        $testerTag,
+        $testerServiceSuffix
+    ) {
+        $definition = new Definition(
+            $testerClassName, [new Reference($testerExtensionId), new Reference(Accumulator::SERVICE_ID)]
+        );
+        $definition->addTag($testerTag, ['priority' => 10000]);
+
+        $container->setDefinition($testerTag . $testerServiceSuffix, $definition);
     }
 }

@@ -7,10 +7,13 @@ Feature: Analyse Behat suites execution time
     Given I am using the suite "default"
     When I execute the feature "testapp/features/application.feature:2"
     Then I receive a result file which contains the following accumulations:
-      | prefix                        | seconds |
-      | setup;suite;default;          | 0       |
-      | test;suite;default;           | 0       |
-      | setup;feature;application;    | 0       |
-      | test;feature;application;     | 0       |
-      | teardown;feature;application; | 11      |
-      | teardown;suite;default;       | 0       |
+      | prefix                         | seconds |
+      | setup;suite;default;           | 0       |
+      | test;suite;default;            | 0       |
+      | setup;feature;application;     | 0       |
+      | test;feature;application;      | 0       |
+      | setup;scenario;normal;         | 0       |
+      | test;scenario;normal;          | 0       |
+      | teardown;scenario;normal;      | 11      |
+      | teardown;feature;application;  | 0       |
+      | teardown;suite;default;        | 0       |
