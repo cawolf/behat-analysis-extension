@@ -60,9 +60,10 @@ class FeatureContext implements Context
         $this->process->setWorkingDirectory(__DIR__ . '/../..');
         $this->process->setCommandLine(
             sprintf(
-                '%s %s -c testapp/behat.yml -s default %s --analyse %s',
+                '%s %s -c testapp/behat.yml -s %s %s --analyse %s',
                 $this->phpBin,
                 escapeshellarg(BEHAT_BIN_PATH),
+                $this->suite,
                 strtr('--format-settings=\'{"timer": false}\'', ['\'' => '"', '"' => '\"']),
                 $feature
             )
