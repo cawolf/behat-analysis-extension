@@ -14,10 +14,10 @@
         "behat/behat": "^3.0"
     },
     "require-dev": {
-        "phpspec/phpspec": "^3.4",
-        "phpunit/phpunit": "^6.2",
-        "squizlabs/php_codesniffer": "^3.0",
-        "phpmd/phpmd": "^2.6"
+        "phpspec/phpspec": "3.4.3",
+        "phpunit/phpunit": "6.5.14",
+        "squizlabs/php_codesniffer": "3.6.0",
+        "phpmd/phpmd": "2.10.1"
     },
     "autoload": {
         "psr-4": {
