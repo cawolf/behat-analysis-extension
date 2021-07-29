@@ -5,6 +5,8 @@ namespace Cawolf\Behat\Analysis\Context;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use PHPUnit\Framework\Assert;
+use RuntimeException;
+use SplFileObject;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
@@ -19,9 +21,6 @@ class FeatureContext implements Context
     /** @var string */
     private $phpBin;
 
-    /** @var Process */
-    private $process;
-
     /**
      * Prepares test folders in the temporary directory.
      *
@@ -30,11 +29,11 @@ class FeatureContext implements Context
     public function prepareProcess()
     {
         $phpFinder = new PhpExecutableFinder();
-        if (false === $php = $phpFinder->find()) {
-            throw new \RuntimeException('Unable to find the PHP executable.');
+        $php = $phpFinder->find();
+        if (false === $php) {
+            throw new RuntimeException('Unable to find the PHP executable.');
         }
         $this->phpBin = $php;
-        $this->process = new Process(null);
     }
 
     /**
@@ -44,7 +43,6 @@ class FeatureContext implements Context
      */
     public function iAmUsingTheSuite($suite)
     {
-        Assert::assertInternalType('string', $suite);
         Assert::assertNotEmpty($suite);
         $this->suite = $suite;
     }
@@ -57,8 +55,7 @@ class FeatureContext implements Context
      */
     public function iExecuteTheSuite($feature = '')
     {
-        $this->process->setWorkingDirectory(__DIR__ . '/../..');
-        $this->process->setCommandLine(
+        $process = Process::fromShellCommandline(
             sprintf(
                 '%s %s -c testapp/behat.yml -s %s %s --analyse %s',
                 $this->phpBin,
@@ -66,11 +63,14 @@ class FeatureContext implements Context
                 $this->suite,
                 strtr('--format-settings=\'{"timer": false}\'', ['\'' => '"', '"' => '\"']),
                 $feature
-            )
+            ),
+            __DIR__ . '/../..',
+            null,
+            null,
+            90
         );
-        $this->process->setTimeout(90);
-        $this->process->start();
-        $this->process->wait();
+        $process->start();
+        $process->wait();
     }
 
     /**
@@ -81,7 +81,7 @@ class FeatureContext implements Context
     public function iReceiveAResultFileWhichContainsTheFollowingAccumulations(TableNode $table)
     {
         $lastTimestamp = 0;
-        $csvFile = new \SplFileObject('analysis-steps.csv');
+        $csvFile = new SplFileObject('analysis-steps.csv');
         foreach ($table->getHash() as $row) {
             $currentLine = $csvFile->getCurrentLine();
             Assert::assertStringStartsWith($row['prefix'], $currentLine);
