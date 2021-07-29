@@ -11,13 +11,14 @@
         }
     ],
     "require": {
+        "php": "^7.3|^8.0",
         "behat/behat": "^3.0"
     },
     "require-dev": {
-        "phpspec/phpspec": "^3.4",
-        "phpunit/phpunit": "^6.2",
-        "squizlabs/php_codesniffer": "^3.0",
-        "phpmd/phpmd": "^2.6"
+        "phpspec/phpspec": "^7.1",
+        "phpunit/phpunit": "^9.5",
+        "squizlabs/php_codesniffer": "^3.6",
+        "phpmd/phpmd": "^2.10"
     },
     "autoload": {
         "psr-4": {

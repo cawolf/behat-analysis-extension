@@ -1,2 +1,4 @@
+.php-version
+analysis-steps.csv
 /vendor/
 /composer.lock

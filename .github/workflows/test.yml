@@ -1,0 +1,35 @@
+name: test
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - 'master'
+
+jobs:
+  test_unit:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - php: '7.3'
+          - php: '7.4'
+          - php: '8.0'
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: setup php
+        uses: nanasess/setup-php@v3.0.8
+        with:
+          php-version: ${{ matrix.php }}
+      - name: prepare test environment
+        run: composer install
+      - name: execute unit tests
+        run: composer run-script test
