@@ -17,7 +17,7 @@
     "require-dev": {
         "phpspec/phpspec": "^7.1",
         "phpunit/phpunit": "^9.5",
-        "squizlabs/php_codesniffer": "^3.6",
+        "squizlabs/php_codesniffer": "^4.0",
         "phpmd/phpmd": "^2.10"
     },
     "autoload": {
